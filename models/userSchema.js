@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Audio = require("../models/audioSchema");
+const Audio = require("./pagoSchema");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -21,22 +21,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: true
-    },
-    role: {
-        type: String,
-        default: "user",
-        enum: ["user", "admin"]
-    },
-    whatsapp: {
-        type: String
-    },
-    audioList: [{
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Audio"
-        }],
-    state: {
-        type: Boolean,
-        default: true,
     }
 }, {timestamps : true});
 
