@@ -1,23 +1,24 @@
-const Category = require('../models/categorySchema')
+const Programa = require("../models/programaSchema.js");
 
-const createCategory = async (req, res) => {
-    const { name } = req.body;
-    const category = await Category.findOne({ name });
+const createPrograma = async (req, res) => {
+    const { name, price } = req.body;
+    const programa = await Programa.findOne({ name });
     try {
-        if (category) {
+        if (programa) {
             return res.status(400).json({
-                mensaje: "La categoria ya se encuentra creada",
+                mensaje: "El programa ya se encuentra creado",
                 status: 400
             })
         }
-        const newCategory = new Category({
-            name
+        const newPrograma = new Programa({
+            name,
+            price
         })
-        await newCategory.save();
+        await newPrograma.save();
         return res.status(201).json({
-            mensaje: "Categoria creada correctamente",
+            mensaje: "Programa creado correctamente",
             status: 201,
-            newCategory
+            newPrograma
         })
         
     } catch (error) {
@@ -29,19 +30,19 @@ const createCategory = async (req, res) => {
     }
 }
 
-const getAllCategories = async (req, res) => {
-    const categories = await Category.find()
+const getAllProgramas = async (req, res) => {
+    const programas = await Programa.find()
     try {
-        if (!categories) {
+        if (!programas) {
             return res.status(404).json({
-                mensaje: "No se encontraron las categorias",
+                mensaje: "No se encontraron programas",
                 status: 404
             })
         }
         return res.status(201).json({
-            mensaje: "Las categorias se encontraron exitosamente",
+            mensaje: "Programas encontrados",
             status: 201,
-            categories
+            programas
         })
     } catch (error) {
         return res.status(500).json({
@@ -51,21 +52,21 @@ const getAllCategories = async (req, res) => {
     }
 }
 
-const getCategory = async (req, res) => {
+const getPrograma = async (req, res) => {
     const { id } = req.params;
 
-    const categorie = await Category.findById(id);
+    const programa = await Programa.findById(id);
     try {
-        if (!categorie) {
+        if (!programa) {
             return res.status(400).json({
-                mensaje: "Categoria no encontrado",
+                mensaje: "Programa no encontrado",
                 status: 400
             })
         }
         return res.status(201).json({
-            mensaje: "Categoria encontrado",
+            mensaje: "Programa encontrado",
             status: 201,
-            categorie
+            programa
         })
 
     } catch (error) {
@@ -76,24 +77,25 @@ const getCategory = async (req, res) => {
     }
 }
 
-const updateCategory = async (req, res) => {
+const updatePrograma = async (req, res) => {
     const { id } = req.params;
-    const { name } = req.body
+    const { name, price } = req.body
     try {
-        const category = await Category.findByIdAndUpdate(id,{
+        const programa = await Programa.findByIdAndUpdate(id,{
             name,
+            price
         }, {new: true})
 
-        if (!category){
+        if (!programa){
                 return res.status(404).json({
-                    mensaje: "Categoria no encontrado",
+                    mensaje: "Programa no encontrado",
                     status:404
                 })
             }
         return res.status(200).json({
-            mensaje: "Categoria actualizada correctamente",
+            mensaje: "Programa actualizado correctamente",
             status: 200,
-            category
+            programa
         })
     } catch (error) {
         return  res.status(500).json({
@@ -103,20 +105,20 @@ const updateCategory = async (req, res) => {
     }
 }
 
-const deleteCategory = async (req, res) => {
+const deletePrograma = async (req, res) => {
     const { id } = req.params;
     try {
-        const category = await Category.findByIdAndDelete(id)
-        if (!category){
+        const programa = await Progrma.findByIdAndDelete(id)
+        if (!programa){
                 return res.status(404).json({
-                    mensaje: "Categoria no encontrado",
+                    mensaje: "Programa no encontrado",
                     status:404
                 })
             }
         return res.status(200).json({
-            mensaje: "Categoria eliminada correctamente",
+            mensaje: "Programa eliminado correctamente",
             status: 200,
-            category
+            programa
         })
     } catch (error) {
         return  res.status(500).json({
@@ -127,8 +129,8 @@ const deleteCategory = async (req, res) => {
 }
 
 module.exports = {
-    createCategory,
-    getAllCategories,
-    updateCategory,
-    deleteCategory
+    createPrograma,
+    getAllProgramas,
+    updatePrograma,
+    deletePrograma
   }
