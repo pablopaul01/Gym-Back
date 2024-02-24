@@ -1,30 +1,45 @@
-const Audio = require("../models/audioSchema")
+const Pago = require('../models/pagoSchema');
+const Alumno = require('../models/alumnoSchema');
 const cloudinary = require("cloudinary").v2
 
-const createAudio = async (req, res) => {
-    const { title, artist, category } = req.body;
+const createPago = async (req, res) => {
+    const { fecha, monto, medio, alumno } = req.body;
     const {path} = req.file;
-    const audio = await Audio.findOne({ title });
-    const audioCloud= await cloudinary.uploader.upload(path,{resource_type: 'auto'});
+
+    
     try {
-        if (audio) {
-            return res.status(400).json({
-                mensaje: "El audio ya se encuentra creado",
-                status: 400
+        if (!path) {
+            const newPago = new Pago({
+                fecha_de_pago: fecha,
+                monto,
+                //la fecha de vencimiento es fecha + 30 dias
+                fecha_de_vencimiento: new Date(fecha.getTime() + 30 * 24 * 60 * 6),
+                medio_de_pago: medio,
+                alumno,
             })
         }
-        const newAudio = new Audio({
-            title,
-            artist,
-            url: audioCloud.secure_url,
-            duration: audioCloud.duration,
-            category
-        })
-        await newAudio.save();
+        else{
+
+            const comprobanteCloud= await cloudinary.uploader.upload(path,{resource_type: 'auto'});
+            const newPago = new Pago({
+                fecha_de_pago: fecha,
+                monto,
+                comprobante: audioCloud.secure_url,
+                //la fecha de vencimiento es fecha + 30 dias
+                fecha_de_vencimiento: new Date(fecha.getTime() + 30 * 24 * 60 * 6),
+                medio_de_pago: medio,
+                alumno,
+            })
+        }
+        //cuando se guarda el pago debo guardar en alumnoSchema.js el id del pago que se acaba de registrar en el campo ultimo_pago
+        const alumno = await Alumno.findById(alumno);
+        alumno.ultimo_pago = newPago._id;
+        await alumno.save();
+        await newPago.save();
         return res.status(201).json({
-            mensaje: "Audio creado correctamente",
+            mensaje: "Pago registrado correctamente",
             status: 201,
-            newAudio
+            newPago
         })
     } catch (error) {
         return res.status(500).json({

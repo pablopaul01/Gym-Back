@@ -11,6 +11,11 @@ const alumnoSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+    dni: {
+        type: Number,
+        trim: true,
+        required: true
+    },
     email: {
         type: String,
         trim: true,
