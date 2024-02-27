@@ -5,18 +5,20 @@ const cloudinary = require("cloudinary").v2
 const createPago = async (req, res) => {
     const { fecha, monto, medio, alumno } = req.body;
     const {path} = req.file;
-
+    const alumnoFind = await Alumno.findById(alumno);
     
     try {
         if (!path) {
             const newPago = new Pago({
                 fecha_de_pago: fecha,
                 monto,
-                //la fecha de vencimiento es fecha + 30 dias
-                fecha_de_vencimiento: new Date(fecha.getTime() + 30 * 24 * 60 * 6),
                 medio_de_pago: medio,
                 alumno,
             })
+            //la fecha de vencimiento es alumnoFind.proximo_vencimiento + 30 dias   
+            const fecha_de_vencimiento= alumnoFind.proximo_vencimiento + 30 * 24 * 60 * 6;
+            alumnoFind.proximo_vencimiento = fecha_de_vencimiento;
+            alumnoFind.ultimo_pago = newPago._id;
         }
         else{
 
