@@ -17,10 +17,6 @@ const pagoSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    fecha_de_vencimiento: {
-        type: Date,
-        trim: true
-    },
     alumno: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Alumno",

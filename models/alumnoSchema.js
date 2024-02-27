@@ -16,16 +16,6 @@ const alumnoSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    email: {
-        type: String,
-        trim: true,
-        required: true
-    },
-    password: {
-        type: String,
-        trim: true,
-        required: true
-    },
     whatsapp: {
         type: Number,
         require: true
@@ -35,10 +25,18 @@ const alumnoSchema = new mongoose.Schema({
         ref: "Programas",
         trim: true
     },
+    fecha_inicio_ciclo: {
+        type: Date,
+        required: true
+    },
     ultimo_pago: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pago",
         trim: true
+    },
+    proximo_vencimiento: {
+        type: Date,
+        required: true
     }
 }, { timestamps: true });
 
