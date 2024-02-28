@@ -53,21 +53,21 @@ const createPago = async (req, res) => {
 }
 
 
-const getAllAudios = async (req, res) => {
+const getAllpagos = async (req, res) => {
 
-    const audios = await Audio.find().populate("category")
+    const pagos = await Pago.find()
 
     try {
-        if (!audios) {
+        if (!pagos) {
             return res.status(404).json({
-                mensaje: "No se encontraron los usuarios",
+                mensaje: "No se encontraron pagos",
                 status: 404
             })
         }
         return res.status(201).json({
-            mensaje: "Los usuarios se encontraron exitosamente",
+            mensaje: "Pagos encontrados exitosamente",
             status: 201,
-            audios
+            pagos
         })
     } catch (error) {
         return res.status(500).json({
