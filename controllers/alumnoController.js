@@ -4,10 +4,10 @@ const Programa = require("../models/programaSchema.js");
 
 const getAllAlumnos = async (req, res) => {
 
-    const alumno = await Alumno.find()
+    const alumnos = await Alumno.find()
 
     try {
-        if (!alumno) {
+        if (!alumnos) {
             return res.status(404).json({
                 mensaje: "No se encontraron los usuarios",
                 status: 404
@@ -17,9 +17,10 @@ const getAllAlumnos = async (req, res) => {
         return res.status(201).json({
             mensaje: "Los usuarios se encontraron exitosamente",
             status: 201,
-            alumno
+            alumnos
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500
@@ -53,20 +54,26 @@ const getAlumnoById = async (req, res) => {
 
 const registerAlumno = async (req, res) => {
     const { name, lastname,dni, whatsapp } = req.body;
-    const alumno = await Alumno.findOne({ dni });
     try {
+        const alumno = await Alumno.findOne({ dni });
         if (alumno) {
             return res.status(400).json({
                 mensaje: "El alumno ya se encuentra registrado",
                 status: 400
             })
         }
+        const fechaActual = new Date();
+        const proximoVencimiento = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, fechaActual.getDate());
         const newAlumno = new Alumno({
             name,
             lastname,
             dni,
-            whatsapp
+            whatsapp, 
+            fecha_inicio_ciclo: Date.now(),
+            //proximo vencimiento es data now + 30 dias
+            proximo_vencimiento: proximoVencimiento
         })
+        console.log(newAlumno);
         await newAlumno.save();
         return res.status(201).json({
             mensaje: "Alumno registrado correctamente",
@@ -74,6 +81,7 @@ const registerAlumno = async (req, res) => {
             newAlumno
         })
     } catch (error) {
+        console.log("error:", error)
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde. entro por aqui",
             status: 500,
