@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const upload = require("../middlewares/multer")
 const { register, getAllUsers, getUserById, deleteUser, login, userUpdate, changeToAdmin, userDisabled, addAudios, deleteAudio, recoverPass, resetPass } = require("../controllers/userController");
-const { registerAlumno, getAllAlumnos} = require("../controllers/alumnoController");
+const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate, asginPrograma} = require("../controllers/alumnoController");
 const authenticateAdmin = require("../middlewares/authAdmin");
 const authenticateUser = require("../middlewares/authUser");
+const { createPrograma, getAllProgramas, getPrograma, updatePrograma, deletePrograma } = require("../controllers/programaController");
 
 // router.post("/", upload.single("audio"),authenticateAdmin, createAudio);
 // router.delete("/:id",authenticateAdmin, delAudio);
@@ -30,6 +31,17 @@ const authenticateUser = require("../middlewares/authUser");
 //rutas de alumnos
 router.post("/alumno", registerAlumno);
 router.get("/alumnos", getAllAlumnos);
+router.get("/alumno/:id", getAlumnoById);
+router.delete("/alumno/:id", deleteAlumno);
+router.put("/alumno/:id", alumnoUpdate);
+router.put("/alumno/programa/:id", asginPrograma);
+
+//rutas de programas
+router.post("/programa", createPrograma);
+router.get("/programas", getAllProgramas);
+router.get("/programa/:id", getPrograma);
+router.put("/programa/:id", updatePrograma);
+router.delete("/programa/:id", deletePrograma);
 
 // router.post("/usuario/audios/:id",authenticateAdmin ,addAudios);
 // router.put("/usuario/audios/:id",authenticateAdmin ,deleteAudio);

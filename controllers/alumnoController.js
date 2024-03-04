@@ -7,9 +7,9 @@ const getAllAlumnos = async (req, res) => {
     const alumnos = await Alumno.find()
 
     try {
-        if (!alumnos) {
+        if (!alumnos || alumnos.length === 0) {
             return res.status(404).json({
-                mensaje: "No se encontraron los usuarios",
+                mensaje: "No se encontraron usuarios",
                 status: 404
             })
         }
@@ -101,7 +101,7 @@ const deleteAlumno = async (req, res) => {
                 status: 400
             })
         }
-        if (!user) {
+        if (!alumno) {
             return res.status(404).json({
                 mensaje: "Alumno no encontrado",
                 status: 404
@@ -115,7 +115,7 @@ const deleteAlumno = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({
-            mensaje: "Hubo un error, intente más tarde",
+            mensaje: "Hubo un error, intente más tarde,here",
             status: 500,
         })
     }
@@ -134,14 +134,17 @@ const alumnoUpdate = async (req, res) => {
         const alumno = await Alumno.findByIdAndUpdate(id, {
             ...req.body,
             name,
-            lastname, dni, whatsapp
+            lastname, 
+            dni,
+             whatsapp
         }, { new: true });
         return res.status(200).json({
             mensaje: "Alumno modificado correctamente",
             status: 200,
-            token
+            // token
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
             status: 500,
@@ -152,11 +155,12 @@ const alumnoUpdate = async (req, res) => {
 const asginPrograma = async (req, res) => {
     const { id } = req.params;
     const { programa } = req.body
+    console.log(programa);
     const alumno = await Alumno.findOne({ _id: id });
     try {
         if (!alumno) {
             return res.status(404).json({
-                mensaje: "Alumno no encontrado",
+                mensaje: "Alumno no encontrado, emtrp aqui",
                 status: 404
             })
         }
@@ -167,8 +171,13 @@ const asginPrograma = async (req, res) => {
                 status: 404
             })
         }
-        alumno.programa = program._id;
+        alumno.clases = program._id;
         await alumno.save();
+        return res.status(200).json({
+            mensaje: "Programa asignado exitosamente",
+            status: 200,
+            alumno
+        })
     } catch (error) {
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
@@ -176,6 +185,43 @@ const asginPrograma = async (req, res) => {
             error
         })
     }
+}
+
+const removePrograma = async (req, res) => {
+    const { id } = req.params;
+    const { programa } = req.body
+
+  try {
+    const alumno = await Alumno.findOne({ _id: id });
+    if (!alumno) {
+      return res.status(404).json({
+        mensaje: "Alumno no encontrado",
+        status: 404
+      });
+    }
+    if (!programa !== alumno.clases) {
+      return res.status(404).json({
+        mensaje: "Programa no encontrado",
+        status: 404
+      });
+    }
+
+    alumno.clases = null;
+
+    await alumno.save();
+
+    return res.status(200).json({
+      mensaje: "Programa removido exitosamente",
+      status: 200,
+      alumno
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: "Hubo un error, intente más tarde",
+      status: 500
+    });
+  }
 }
 
 module.exports = {
