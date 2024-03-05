@@ -12,6 +12,8 @@ const pagoSchema = new mongoose.Schema({
     medio_de_pago: {
         type: String,
         trim: true,
+        //los medios de pagos pueden ser: transferencia o efectivo
+        enum: ['transferencia', 'efectivo']
     },
     comprobante: {
         type: String,

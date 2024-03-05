@@ -5,7 +5,7 @@ const fs = require('fs');
 module.exports = multer({
     storage: multer.diskStorage({}),
     fileFilter: (req, file, cb) => { 
-        const fileTypes = /mp3|MP3|mpeg/;
+        const fileTypes = /jpeg|jpg|png/;
         const mimeType = fileTypes.test(file.mimetype);
         const extname = fileTypes.test(path.extname(file.originalname).toLocaleLowerCase());
         console.log("mimeType: " + file.mimetype)
