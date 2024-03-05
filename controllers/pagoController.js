@@ -27,7 +27,7 @@ const createPago = async (req, res) => {
             let fecha_de_vencimiento= new Date(alumnoFind.proximo_vencimiento);
             fecha_de_vencimiento.setDate(fecha_de_vencimiento.getDate() + 30);
             alumnoFind.proximo_vencimiento = fecha_de_vencimiento.toISOString();
-            alumnoFind.ultimo_pago = newPago._id;
+            alumnoFind.pagos.push(newPago._id);
             await alumnoFind.save();
             await newPago.save();
             return res.status(201).json({
@@ -48,7 +48,7 @@ const createPago = async (req, res) => {
                 medio_de_pago: medio,
                 alumno,
             })
-            alumnoFind.ultimo_pago = newPago._id;
+            alumnoFind.pagos.push(newPago._id);
             await alumnoFind.save();
             await newPago.save();
             return res.status(201).json({
