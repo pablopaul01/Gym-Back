@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const upload = require("../middlewares/multer")
 const { register, getAllUsers, getUserById, deleteUser, login, userUpdate, changeToAdmin, userDisabled, addAudios, deleteAudio, recoverPass, resetPass } = require("../controllers/userController");
-const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate, asginPrograma} = require("../controllers/alumnoController");
+const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate, asginPrograma, changeVencimiento} = require("../controllers/alumnoController");
 const authenticateAdmin = require("../middlewares/authAdmin");
 const authenticateUser = require("../middlewares/authUser");
 const { createPrograma, getAllProgramas, getPrograma, updatePrograma, deletePrograma } = require("../controllers/programaController");
@@ -36,6 +36,7 @@ router.get("/alumno/:id", getAlumnoById);
 router.delete("/alumno/:id", deleteAlumno);
 router.put("/alumno/:id", alumnoUpdate);
 router.put("/alumno/programa/:id", asginPrograma);
+router.put("/alumno/vencimiento/:id", changeVencimiento);
 
 //rutas de programas
 router.post("/programa", createPrograma);
