@@ -23,6 +23,10 @@ const pagoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Alumno",
         trim: true
+    },
+    vencimiento_anterior:{
+        type: Date,
+        trim: true
     }
 }, {timestamps : true});
 

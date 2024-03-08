@@ -17,12 +17,15 @@ const createPago = async (req, res) => {
             })
         }
         if (!req.file) {
+            let vencimiento_anterior = new Date(alumnoFind.proximo_vencimiento);
             const newPago = new Pago({
                 fecha_de_pago: fecha,
                 monto,
                 medio_de_pago: medio,
                 alumno,
+                vencimiento_anterior: vencimiento_anterior.toISOString(),
             })
+            
             //la fecha de vencimiento es alumnoFind.proximo_vencimiento + 30 dias   
             let fecha_de_vencimiento= new Date(alumnoFind.proximo_vencimiento);
             fecha_de_vencimiento.setDate(fecha_de_vencimiento.getDate() + 30);
@@ -37,6 +40,7 @@ const createPago = async (req, res) => {
             })
         }
         else{
+            let vencimiento_anterior = new Date(alumnoFind.proximo_vencimiento);
             let fecha_de_vencimiento= new Date(alumnoFind.proximo_vencimiento);
             fecha_de_vencimiento.setDate(fecha_de_vencimiento.getDate() + 30);
             alumnoFind.proximo_vencimiento = fecha_de_vencimiento.toISOString();
@@ -47,6 +51,7 @@ const createPago = async (req, res) => {
                 comprobante: comprobanteCloud.secure_url,
                 medio_de_pago: medio,
                 alumno,
+                vencimiento_anterior: vencimiento_anterior.toISOString(),
             })
             alumnoFind.pagos.push(newPago._id);
             await alumnoFind.save();
