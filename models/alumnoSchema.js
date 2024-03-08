@@ -29,11 +29,11 @@ const alumnoSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    ultimo_pago: {
+    pagos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pago",
         trim: true
-    },
+    }],
     proximo_vencimiento: {
         type: Date,
         required: true

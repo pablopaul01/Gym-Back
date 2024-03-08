@@ -4,7 +4,7 @@ const Programa = require("../models/programaSchema.js");
 
 const getAllAlumnos = async (req, res) => {
 
-    const alumnos = await Alumno.find()
+    const alumnos = await Alumno.find().populate("pagos");
 
     try {
         if (!alumnos || alumnos.length === 0) {
