@@ -252,6 +252,71 @@ const changeVencimiento = async (req, res) => {
     }
 }
 
+const getAlumnosPorVencer = async (req, res) => {
+    const { fecha } = req.body;
+
+    try {
+        // Obtener todos los alumnos
+        const alumnos = await Alumno.find();
+        // Filtrar los alumnos vencidos y por vencerse
+        const alumnosPorVencer = [];
+        const fechaActual = new Date(fecha);
+        console.log("fecha actual y fecha",fechaActual);
+        for (const alumno of alumnos) {
+            console.log("fecha proximo vencimiento",alumno.proximo_vencimiento);
+            if (alumno.proximo_vencimiento <= fechaActual) {
+                alumnosPorVencer.push(alumno);
+            }
+        }
+
+        return res.status(200).json({
+            mensaje: "Listado de alumnos vencidos y por vencer",
+            status: 200,
+            alumnos_por_vencer: alumnosPorVencer
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
+            error: error.message
+        });
+    }
+};
+
+const getAlumnosVencidos = async (req, res) => {
+
+    try {
+        // Obtener todos los alumnos
+        const alumnos = await Alumno.find();
+        // Filtrar los alumnos vencidos y por vencerse
+        const alumnosVencidos = [];
+        const fechaActual = new Date(Date.now());
+        console.log("fecha actual",fechaActual);
+        for (const alumno of alumnos) {
+            console.log("fecha proximo vencimiento",alumno.proximo_vencimiento);
+            if (alumno.proximo_vencimiento <= fechaActual) {
+                alumnosVencidos.push(alumno);
+            }
+        }
+
+        return res.status(200).json({
+            mensaje: "Listado de alumnos vencidos y por vencer",
+            status: 200,
+            alumnos_vencidos: alumnosVencidos
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     registerAlumno,
     getAllAlumnos,
@@ -259,5 +324,7 @@ module.exports = {
     deleteAlumno,
     alumnoUpdate,
     asginPrograma,
-    changeVencimiento
+    changeVencimiento,
+    getAlumnosPorVencer,
+    getAlumnosVencidos
 }
