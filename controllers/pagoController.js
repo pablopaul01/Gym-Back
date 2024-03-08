@@ -26,9 +26,9 @@ const createPago = async (req, res) => {
                 vencimiento_anterior: vencimiento_anterior.toISOString(),
             })
             
-            //la fecha de vencimiento es alumnoFind.proximo_vencimiento + 30 dias   
-            let fecha_de_vencimiento= new Date(alumnoFind.proximo_vencimiento);
-            fecha_de_vencimiento.setDate(fecha_de_vencimiento.getDate() + 30);
+            // la fecha de vencimiento es el mismo día del mes siguiente
+            let fecha_de_vencimiento = new Date(alumnoFind.proximo_vencimiento);
+            fecha_de_vencimiento.setMonth(fecha_de_vencimiento.getMonth() + 1);
             alumnoFind.proximo_vencimiento = fecha_de_vencimiento.toISOString();
             alumnoFind.pagos.push(newPago._id);
             await alumnoFind.save();
@@ -41,8 +41,8 @@ const createPago = async (req, res) => {
         }
         else{
             let vencimiento_anterior = new Date(alumnoFind.proximo_vencimiento);
-            let fecha_de_vencimiento= new Date(alumnoFind.proximo_vencimiento);
-            fecha_de_vencimiento.setDate(fecha_de_vencimiento.getDate() + 30);
+            let fecha_de_vencimiento = new Date(alumnoFind.proximo_vencimiento);
+            fecha_de_vencimiento.setMonth(fecha_de_vencimiento.getMonth() + 1);
             alumnoFind.proximo_vencimiento = fecha_de_vencimiento.toISOString();
             const comprobanteCloud= await cloudinary.uploader.upload( req.file.path );
             const newPago = new Pago({
@@ -73,6 +73,7 @@ const createPago = async (req, res) => {
 }
 
 
+
 const getAllpagos = async (req, res) => {
 
     const pagos = await Pago.find()
@@ -97,10 +98,12 @@ const getAllpagos = async (req, res) => {
     }
 }
 
-const delPago= async (req, res) => {
+
+
+const delPago = async (req, res) => {
     const { id } = req.params;
     try {
-        // Buscar el audio por ID
+        // Buscar el pago por ID
         const pago = await Pago.findById(id);
         if (!pago) {
             return res.status(404).json({
@@ -108,13 +111,29 @@ const delPago= async (req, res) => {
                 status: 404
             });
         }
-        // Obtener el public_id de Cloudinary desde la URL del audio
+        // Obtener el alumno asociado al pago
+        const alumno = await Alumno.findOne({ pagos: id });
+        if (!alumno) {
+            return res.status(404).json({
+                mensaje: 'El alumno asociado al pago no existe',
+                status: 404
+            });
+        }
+        // Eliminar el pago del array de pagos del alumno
+        alumno.pagos = alumno.pagos.filter(p => p.toString() !== id);
+        // Obtener el último pago del alumno
+        const ultimoPago = alumno.pagos[alumno.pagos.length - 1];
+        // Actualizar el proximo_vencimiento del alumno
+        const vencimiento = await Pago.findById(ultimoPago);
+        alumno.proximo_vencimiento = vencimiento ? vencimiento.vencimiento_anterior : null;
+        // Guardar los cambios en el alumno
+        await alumno.save();
+        // Obtener el public_id de Cloudinary desde la URL del comprobante
         const publicId = pago.comprobante.split('/').pop().split('.')[0];
-        // Eliminar el archivo de Cloudinary
-        await cloudinary.uploader.destroy(publicId)
-        .then(result=>console.log(result));
-        // Utilizar findByIdAndDelete para activar los middleware
-        pago.deleteOne();
+        // Eliminar el comprobante de Cloudinary
+        await cloudinary.uploader.destroy(publicId);
+        // Eliminar el pago de la base de datos
+        await pago.deleteOne();
         return res.status(200).json({
             mensaje: 'Pago eliminado correctamente',
             status: 200

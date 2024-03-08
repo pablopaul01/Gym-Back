@@ -30,7 +30,7 @@ const getAllAlumnos = async (req, res) => {
 
 const getAlumnoById = async (req, res) => {
     const { id } = req.params;
-    const alumno = await Alumno.findOne({ _id: id });
+    const alumno = await Alumno.findOne({ _id: id }).populate("pagos");
     try {
         if (!alumno) {
             return res.status(404).json({
@@ -224,11 +224,40 @@ const removePrograma = async (req, res) => {
   }
 }
 
+const changeVencimiento = async (req, res) => {
+    const { id } = req.params;
+    const { vencimiento } = req.body
+    try {
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({
+                mensaje: "Id del alumno no válido",
+                status: 400
+            })
+        }
+        const alumno = await Alumno.findByIdAndUpdate(id, {
+            proximo_vencimiento: vencimiento
+        }, { new: true });
+        return res.status(200).json({
+            mensaje: "Vencimiento modificado correctamente",
+            status: 200,
+            // token
+        })
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            mensaje: "Hubo un error, intente más tarde",
+            status: 500,
+        })
+    }
+}
+
 module.exports = {
     registerAlumno,
     getAllAlumnos,
     getAlumnoById,
     deleteAlumno,
     alumnoUpdate,
-    asginPrograma
+    asginPrograma,
+    changeVencimiento
 }
