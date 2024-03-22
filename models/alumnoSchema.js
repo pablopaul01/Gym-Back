@@ -20,6 +20,10 @@ const alumnoSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
+    obraSocial:{
+        type: String,
+        required: true
+    },
     clases: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Programas",

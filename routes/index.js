@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const upload = require("../middlewares/multer")
-const { register, getAllUsers, getUserById, deleteUser, login, userUpdate, changeToAdmin, userDisabled, addAudios, deleteAudio, recoverPass, resetPass } = require("../controllers/userController");
+const { register, getAllUsers, getUserById, deleteUser, login, userUpdate, addAudios, deleteAudio, recoverPass, resetPass } = require("../controllers/userController");
 const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate, asginPrograma, changeVencimiento, getAlumnosVencidosYPorVencer, getAlumnosPorVencer, getAlumnosVencidos} = require("../controllers/alumnoController");
-const authenticateAdmin = require("../middlewares/authAdmin");
-const authenticateUser = require("../middlewares/authUser");
+// const authenticateAdmin = require("../middlewares/authAdmin");
+// const authenticateUser = require("../middlewares/authUser");
 const { createPrograma, getAllProgramas, getPrograma, updatePrograma, deletePrograma } = require("../controllers/programaController");
 const { createPago, getAllpagos, delPago } = require("../controllers/pagoController");
 
@@ -17,17 +17,17 @@ const { createPago, getAllpagos, delPago } = require("../controllers/pagoControl
 // router.put("/category/:id", updateCategory);
 // router.delete("/category/:id",authenticateAdmin, deleteCategory);
 
-//rutas de usuarios
-// router.get("/usuarios",authenticateAdmin ,getAllUsers);
-// router.get("/usuario/:id" , getUserById);
-// router.delete("/usuario/:id",authenticateAdmin , deleteUser);
-// router.put("/usuario/:id",authenticateUser , userUpdate);
-// router.post("/registrar",authenticateAdmin , register);
-// router.post("/login", login);
-// router.put("/admin/:id", authenticateAdmin, changeToAdmin);
-// router.put("/desactivar/usuario/:id",authenticateAdmin, userDisabled);
-// router.post("/usuario/recuperar", recoverPass);
-// router.put("/usuario/reset/:id/:token", resetPass);
+// rutas de usuarios
+router.get("/usuarios" ,getAllUsers);
+router.get("/usuario/:id" , getUserById);
+router.delete("/usuario/:id", deleteUser);
+router.put("/usuario/:id", userUpdate);
+router.post("/registrar", register);
+router.post("/login", login);
+// router.put("/admin/:id", changeToAdmin);
+// router.put("/desactivar/usuario/:id", userDisabled);
+router.post("/usuario/recuperar", recoverPass);
+router.put("/usuario/reset/:id/:token", resetPass);
 
 //rutas de alumnos
 router.post("/alumno", registerAlumno);

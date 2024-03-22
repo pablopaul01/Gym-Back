@@ -53,7 +53,7 @@ const getAlumnoById = async (req, res) => {
 };
 
 const registerAlumno = async (req, res) => {
-    const { name, lastname,dni, whatsapp } = req.body;
+    const { name, lastname,dni, whatsapp,obraSocial } = req.body;
     try {
         const alumno = await Alumno.findOne({ dni });
         if (alumno) {
@@ -68,7 +68,8 @@ const registerAlumno = async (req, res) => {
             name,
             lastname,
             dni,
-            whatsapp, 
+            whatsapp,
+            obraSocial,
             fecha_inicio_ciclo: Date.now(),
             //proximo vencimiento es data now + 30 dias
             proximo_vencimiento: proximoVencimiento
@@ -123,7 +124,7 @@ const deleteAlumno = async (req, res) => {
 
 const alumnoUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, lastname, dni, whatsapp } = req.body
+    const { name, lastname, dni, whatsapp,obraSocial } = req.body
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
@@ -136,7 +137,8 @@ const alumnoUpdate = async (req, res) => {
             name,
             lastname, 
             dni,
-             whatsapp
+             whatsapp,
+             obraSocial
         }, { new: true });
         return res.status(200).json({
             mensaje: "Alumno modificado correctamente",
