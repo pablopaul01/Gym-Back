@@ -26,7 +26,7 @@ const alumnoSchema = new mongoose.Schema({
     },
     clases: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Programas",
+        ref: "Programa",
         trim: true
     },
     fecha_inicio_ciclo: {

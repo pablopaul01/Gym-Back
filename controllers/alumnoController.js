@@ -4,7 +4,7 @@ const Programa = require("../models/programaSchema.js");
 
 const getAllAlumnos = async (req, res) => {
 
-    const alumnos = await Alumno.find().populate("pagos");
+    const alumnos = await Alumno.find().populate("pagos").populate("clases");
 
     try {
         if (!alumnos || alumnos.length === 0) {
@@ -125,6 +125,7 @@ const deleteAlumno = async (req, res) => {
 const alumnoUpdate = async (req, res) => {
     const { id } = req.params;
     const { name, lastname, dni, whatsapp, obraSocial, clases, fecha_inicio_ciclo, proximo_vencimiento } = req.body
+    console.log("clases", clases)
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
