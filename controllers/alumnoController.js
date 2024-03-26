@@ -124,7 +124,7 @@ const deleteAlumno = async (req, res) => {
 
 const alumnoUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, lastname, dni, whatsapp,obraSocial } = req.body
+    const { name, lastname, dni, whatsapp, obraSocial, clases, fecha_inicio_ciclo, proximo_vencimiento } = req.body
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
@@ -138,7 +138,10 @@ const alumnoUpdate = async (req, res) => {
             lastname, 
             dni,
              whatsapp,
-             obraSocial
+             obraSocial,
+             clases,
+             fecha_inicio_ciclo,
+             proximo_vencimiento
         }, { new: true });
         return res.status(200).json({
             mensaje: "Alumno modificado correctamente",
@@ -229,6 +232,7 @@ const removePrograma = async (req, res) => {
 const changeVencimiento = async (req, res) => {
     const { id } = req.params;
     const { vencimiento } = req.body
+    console.log("vencimiento", vencimiento);
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
@@ -239,11 +243,12 @@ const changeVencimiento = async (req, res) => {
         const alumno = await Alumno.findByIdAndUpdate(id, {
             proximo_vencimiento: vencimiento
         }, { new: true });
+        console.log("alumno", alumno)
         return res.status(200).json({
             mensaje: "Vencimiento modificado correctamente",
             status: 200,
-            // token
         })
+
     }
     catch (error) {
         console.log(error);
@@ -252,6 +257,34 @@ const changeVencimiento = async (req, res) => {
             status: 500,
         })
     }
+}
+
+const changeInicioCiclo = async (req, res) => {
+    const { id } = req.params;
+  const { inicioCiclo } = req.body
+  try {
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        mensaje: "Id del alumno no válido",
+        status: 400
+      })
+    }
+
+    const alumno = await Alumno.findByIdAndUpdate(id, {
+      fecha_inicio_ciclo: inicioCiclo
+    }, { new: true });
+
+    return res.status(200).json({
+      mensaje: "Fecha de inicio de ciclo modificada correctamente",
+      status: 200,
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: "Hubo un error, intente más tarde",
+      status: 500
+    })
+  }
 }
 
 const getAlumnosPorVencer = async (req, res) => {
@@ -319,6 +352,7 @@ const getAlumnosVencidos = async (req, res) => {
     }
 };
 
+
 module.exports = {
     registerAlumno,
     getAllAlumnos,
@@ -328,5 +362,6 @@ module.exports = {
     asginPrograma,
     changeVencimiento,
     getAlumnosPorVencer,
-    getAlumnosVencidos
+    getAlumnosVencidos,
+    changeInicioCiclo
 }
