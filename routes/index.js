@@ -51,7 +51,7 @@ router.delete("/programa/:id", deletePrograma);
 //rutas de pagos
 router.post("/pago", upload.single("comprobante"), createPago);
 router.get("/pagos", getAllpagos);
-router.delete("/pago/:id", delPago);
+router.delete("/pago/:id/:pagoId", delPago);
 
 // router.post("/usuario/audios/:id",authenticateAdmin ,addAudios);
 // router.put("/usuario/audios/:id",authenticateAdmin ,deleteAudio);

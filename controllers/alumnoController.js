@@ -62,19 +62,19 @@ const registerAlumno = async (req, res) => {
                 status: 400
             })
         }
-        const fechaActual = new Date();
-        const proximoVencimiento = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, fechaActual.getDate());
+        // Obtener la fecha actual en la zona horaria de Argentina (GMT-0300)
+        const fechaActualArgentina = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Argentina/Buenos_Aires" }));
+        // Calcular la fecha de inicio del ciclo (fecha actual)
+        const fechaInicioCiclo = fechaActualArgentina.toISOString();
         const newAlumno = new Alumno({
             name,
             lastname,
             dni,
             whatsapp,
             obraSocial,
-            fecha_inicio_ciclo: Date.now(),
-            //proximo vencimiento es data now + 30 dias
-            proximo_vencimiento: proximoVencimiento
+            fecha_inicio_ciclo: fechaInicioCiclo,
+            proximo_vencimiento: fechaInicioCiclo
         })
-        console.log(newAlumno);
         await newAlumno.save();
         return res.status(201).json({
             mensaje: "Alumno registrado correctamente",
@@ -125,7 +125,6 @@ const deleteAlumno = async (req, res) => {
 const alumnoUpdate = async (req, res) => {
     const { id } = req.params;
     const { name, lastname, dni, whatsapp, obraSocial, clases, fecha_inicio_ciclo, proximo_vencimiento } = req.body
-    console.log("clases", clases)
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
@@ -161,7 +160,6 @@ const alumnoUpdate = async (req, res) => {
 const asginPrograma = async (req, res) => {
     const { id } = req.params;
     const { programa } = req.body
-    console.log(programa);
     const alumno = await Alumno.findOne({ _id: id });
     try {
         if (!alumno) {
@@ -233,7 +231,6 @@ const removePrograma = async (req, res) => {
 const changeVencimiento = async (req, res) => {
     const { id } = req.params;
     const { vencimiento } = req.body
-    console.log("vencimiento", vencimiento);
     try {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
@@ -244,7 +241,6 @@ const changeVencimiento = async (req, res) => {
         const alumno = await Alumno.findByIdAndUpdate(id, {
             proximo_vencimiento: vencimiento
         }, { new: true });
-        console.log("alumno", alumno)
         return res.status(200).json({
             mensaje: "Vencimiento modificado correctamente",
             status: 200,
@@ -297,9 +293,7 @@ const getAlumnosPorVencer = async (req, res) => {
         // Filtrar los alumnos vencidos y por vencerse
         const alumnosPorVencer = [];
         const fechaActual = new Date(fecha);
-        console.log("fecha actual y fecha",fechaActual);
         for (const alumno of alumnos) {
-            console.log("fecha proximo vencimiento",alumno.proximo_vencimiento);
             if (alumno.proximo_vencimiento <= fechaActual) {
                 alumnosPorVencer.push(alumno);
             }
@@ -329,9 +323,7 @@ const getAlumnosVencidos = async (req, res) => {
         // Filtrar los alumnos vencidos y por vencerse
         const alumnosVencidos = [];
         const fechaActual = new Date(Date.now());
-        console.log("fecha actual",fechaActual);
         for (const alumno of alumnos) {
-            console.log("fecha proximo vencimiento",alumno.proximo_vencimiento);
             if (alumno.proximo_vencimiento <= fechaActual) {
                 alumnosVencidos.push(alumno);
             }
