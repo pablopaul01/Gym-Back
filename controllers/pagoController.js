@@ -2,6 +2,7 @@ const Pago = require('../models/pagoSchema');
 const Alumno = require('../models/alumnoSchema');
 const cloudinary = require("cloudinary").v2
 const { ObjectId } = require('mongodb');
+const { default: mongoose } = require('mongoose');
 
 
 const createPago = async (req, res) => {
@@ -175,46 +176,38 @@ const delPago = async (req, res) => {
 };
 
 
-const updateAudio = async (req, res) => {
+const updatePago = async (req, res) => {
     const { id } = req.params;
-    const { title, artist, category } = req.body;
+    const { fecha_de_pago, monto, medio_de_pago } = req.body
     try {
-        // Buscar el audio por ID
-        const audio = await Audio.findById(id);
-
-        if (!audio) {
-            return res.status(404).json({
-                mensaje: 'El audio no existe',
-                status: 404
-            });
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({
+                mensaje: "Id de pago no válido",
+                status: 400
+            })
         }
-
-        // Actualizar los datos del audio
-        audio.title = title || audio.title;
-        audio.artist = artist || audio.artist;
-        audio.category = category || audio.category;
-
-        // Guardar los cambios en la base de datos
-        const updatedAudio = await audio.save();
-
+        const pago = await Pago.findByIdAndUpdate(id, {
+            ...req.body,
+            fecha_de_pago,
+            monto, 
+            medio_de_pago,
+        }, { new: true });
         return res.status(200).json({
-            mensaje: 'Audio actualizado correctamente',
+            mensaje: "Pago actualizado correctamente",
             status: 200,
-            updatedAudio
-        });
+        })
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).json({
-            mensaje: 'Hubo un error, intente más tarde',
+            mensaje: "Hubo un error, intente más tarde",
             status: 500,
-            error: error.message
-        });
+        })
     }
-};
+}
 
 module.exports = {
     createPago,
     getAllpagos,
     delPago,
-    updateAudio
+    updatePago
   }

@@ -5,7 +5,7 @@ const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate
 // const authenticateAdmin = require("../middlewares/authAdmin");
 // const authenticateUser = require("../middlewares/authUser");
 const { createPrograma, getAllProgramas, getPrograma, updatePrograma, deletePrograma } = require("../controllers/programaController");
-const { createPago, getAllpagos, delPago } = require("../controllers/pagoController");
+const { createPago, getAllpagos, delPago, updatePago } = require("../controllers/pagoController");
 
 // router.post("/", upload.single("audio"),authenticateAdmin, createAudio);
 // router.delete("/:id",authenticateAdmin, delAudio);
@@ -52,9 +52,7 @@ router.delete("/programa/:id", deletePrograma);
 router.post("/pago", upload.single("comprobante"), createPago);
 router.get("/pagos", getAllpagos);
 router.delete("/pago/:id/:pagoId", delPago);
-
-// router.post("/usuario/audios/:id",authenticateAdmin ,addAudios);
-// router.put("/usuario/audios/:id",authenticateAdmin ,deleteAudio);
+router.put("/pago/:id", updatePago);
 
 
 module.exports = router; 
