@@ -6,16 +6,7 @@ const { registerAlumno, getAllAlumnos, getAlumnoById, deleteAlumno, alumnoUpdate
 // const authenticateUser = require("../middlewares/authUser");
 const { createPrograma, getAllProgramas, getPrograma, updatePrograma, deletePrograma } = require("../controllers/programaController");
 const { createPago, getAllpagos, delPago, updatePago } = require("../controllers/pagoController");
-
-// router.post("/", upload.single("audio"),authenticateAdmin, createAudio);
-// router.delete("/:id",authenticateAdmin, delAudio);
-// router.get("/" ,getAllAudios);
-// router.put("/:id",upload.none(),authenticateAdmin, updateAudio);
-
-// router.post("/category",upload.none(), authenticateAdmin, createCategory);
-// router.get("/categories", getAllCategories);
-// router.put("/category/:id", updateCategory);
-// router.delete("/category/:id",authenticateAdmin, deleteCategory);
+const { getPagosMensual, getPagosMensualPorMedio, getAlumnosStats } = require("../controllers/reportController");
 
 // rutas de usuarios
 router.get("/usuarios" ,getAllUsers);
@@ -54,5 +45,10 @@ router.get("/pagos", getAllpagos);
 router.delete("/pago/:id/:pagoId", delPago);
 router.put("/pago/:id", updatePago);
 
+
+//rutas de reportes
+router.get("/reporte/pagosMensual/:mes", getPagosMensual);
+router.get("/reporte/pagosMensualPorMedio/:mes", getPagosMensualPorMedio);
+router.get("/reporte/alumnosStats", getAlumnosStats)
 
 module.exports = router; 

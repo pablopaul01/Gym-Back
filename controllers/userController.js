@@ -230,8 +230,6 @@ const userUpdate = async (req, res) => {
             status: 200,
             token
         })
-
-
     } catch (error) {
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
