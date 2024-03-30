@@ -264,7 +264,7 @@ const recoverPass = async (req, res) => {
         from: 'gimansiamilitarlomas@gmail.com',
         to: `${user.email}`,
         subject: 'Reestablecer contraseña GML',
-        text: `Para reestablecer la contraseña haga click en el siguente enlace: http://localhost:5173/reset_password/${user._id}/${encodeURIComponent(token)}`
+        text: `Para reestablecer la contraseña haga click en el siguente enlace: https://gimnasiamilitarlomas.netlify.app/reset_password/${user._id}/${encodeURIComponent(token)}`
       };
       
       transporter.sendMail(mailOptions, function(error, info){
