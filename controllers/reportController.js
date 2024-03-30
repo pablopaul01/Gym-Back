@@ -3,7 +3,6 @@ const Alumno = require('../models/alumnoSchema');
 
 const getPagosMensual = async (req, res) => {
     const { mes } = req.params;
-console.log("el mes", mes)
     try {
         // Obtener el año actual
         const year = new Date().getFullYear();
@@ -145,10 +144,6 @@ const getAlumnosStats = async (req, res) => {
             { $unwind: "$programa" },
             { $project: { _id: 0, nombrePrograma: "$programa.name", total: 1 } }
         ]);
-
-
-
-        console.log(alumnosPorPrograma);
 
         return res.status(200).json({
             mensaje:"Se encontraron los datos de los alumnos",
