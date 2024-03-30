@@ -33,7 +33,7 @@ const createPrograma = async (req, res) => {
 const getAllProgramas = async (req, res) => {
     const programas = await Programa.find()
     try {
-        if (!programas) {
+        if (!programas || programas.length === 0) {
             return res.status(404).json({
                 mensaje: "No se encontraron programas",
                 status: 404
@@ -108,7 +108,7 @@ const updatePrograma = async (req, res) => {
 const deletePrograma = async (req, res) => {
     const { id } = req.params;
     try {
-        const programa = await Progrma.findByIdAndDelete(id)
+        const programa = await Programa.findByIdAndDelete(id)
         if (!programa){
                 return res.status(404).json({
                     mensaje: "Programa no encontrado",
@@ -121,6 +121,7 @@ const deletePrograma = async (req, res) => {
             programa
         })
     } catch (error) {
+        console.log(error);
         return  res.status(500).json({
             mensaje: "hubo un error, intentelo mas tarde fijate que onda",
             status: 500
@@ -131,6 +132,7 @@ const deletePrograma = async (req, res) => {
 module.exports = {
     createPrograma,
     getAllProgramas,
+    getPrograma,
     updatePrograma,
     deletePrograma
   }

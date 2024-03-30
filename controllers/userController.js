@@ -230,8 +230,6 @@ const userUpdate = async (req, res) => {
             status: 200,
             token
         })
-
-
     } catch (error) {
         return res.status(500).json({
             mensaje: "Hubo un error, intente más tarde",
@@ -257,16 +255,16 @@ const recoverPass = async (req, res) => {
         service: 'gmail',
         port:587,
         auth: {
-          user: 'luisisaproject@gmail.com',
-          pass: 'ryspmtaoietxncfg'
+          user: 'gimansiamilitarlomas@gmail.com',
+          pass: 'hngvevaoyzoqswjg'
         }
       });
       
       var mailOptions = {
-        from: 'luisisaproject@gmail.com',
+        from: 'gimansiamilitarlomas@gmail.com',
         to: `${user.email}`,
-        subject: 'Reset Password Link',
-        text: `http://localhost:3000/reset_password/${user._id}/${encodeURIComponent(token)}`
+        subject: 'Reestablecer contraseña GML',
+        text: `Para reestablecer la contraseña haga click en el siguente enlace: http://localhost:5173/reset_password/${user._id}/${encodeURIComponent(token)}`
       };
       
       transporter.sendMail(mailOptions, function(error, info){

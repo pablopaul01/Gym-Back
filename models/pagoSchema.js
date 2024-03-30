@@ -12,6 +12,8 @@ const pagoSchema = new mongoose.Schema({
     medio_de_pago: {
         type: String,
         trim: true,
+        //los medios de pagos pueden ser: transferencia o efectivo
+        enum: ['Transferencia', 'Efectivo']
     },
     comprobante: {
         type: String,
@@ -20,6 +22,10 @@ const pagoSchema = new mongoose.Schema({
     alumno: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Alumno",
+        trim: true
+    },
+    vencimiento_anterior:{
+        type: Date,
         trim: true
     }
 }, {timestamps : true});

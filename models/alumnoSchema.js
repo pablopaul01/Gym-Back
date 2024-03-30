@@ -20,20 +20,24 @@ const alumnoSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
+    obraSocial:{
+        type: String,
+        required: true
+    },
     clases: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Programas",
+        ref: "Programa",
         trim: true
     },
     fecha_inicio_ciclo: {
         type: Date,
         required: true
     },
-    ultimo_pago: {
+    pagos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pago",
         trim: true
-    },
+    }],
     proximo_vencimiento: {
         type: Date,
         required: true
